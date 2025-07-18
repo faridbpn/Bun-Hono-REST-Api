@@ -3,6 +3,7 @@ import { prismaClients } from "../application/database";
 import { LoginUserRequest, RegisterUserRequest, UserResponse, toUserResponse } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { HTTPException } from "hono/http-exception";
+import { User } from "../generated/prisma";
 
 
 export class UserService {
@@ -62,12 +63,34 @@ export class UserService {
 
         user = await prismaClients.user.update({
             where: {
-                UserActivation: request.username
+                username: request.username
             },
             data: {
                 token: crypto.randomUUID()
             }
         })
 
+        const response = toUserResponse(user)
+        response.token = user.token || undefined
+        return response
+
+    }
+
+    static async get(token: string | undefined | null): Promise<User> {
+        token = UserValidation.TOKEN.parse(token) as string
+
+        const user = await prismaClients.user.findFirst({
+            where: {
+                token: token
+            }
+        })
+
+        if(!user) {
+            throw new HTTPException(401, {
+                message: "Unautorized"
+            })
+        }
+
+        return user;
     }
 }
