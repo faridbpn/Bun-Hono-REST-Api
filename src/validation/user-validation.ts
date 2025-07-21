@@ -1,5 +1,4 @@
 import { z, ZodType } from "zod";
-import { LoginUserRequest } from "../model/user-model";
 
 export type RegisterUserRequest = {
   username: string;
@@ -10,6 +9,11 @@ export type RegisterUserRequest = {
 export type UserLoginValidation = {
   username: string;
   password: string;
+};
+
+export type UpdateUserRequest = {
+  password?: string;
+  name?: string;
 };
 
 export class UserValidation {
@@ -26,4 +30,9 @@ export class UserValidation {
   })
 
   static readonly TOKEN: ZodType = z.string().min(1)
+
+  static readonly UPDATE: ZodType<UpdateUserRequest> = z.object({
+    password: z.string().min(1).max(100).optional(),
+    name: z.string().min(1).max(100).optional()
+  })
 }

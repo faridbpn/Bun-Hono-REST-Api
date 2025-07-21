@@ -1,6 +1,5 @@
-import th from "zod/v4/locales/th.cjs";
 import { prismaClients } from "../application/database";
-import { LoginUserRequest, RegisterUserRequest, UserResponse, toUserResponse } from "../model/user-model";
+import { LoginUserRequest, RegisterUserRequest, UpdateUserRequest, UserResponse, toUserResponse } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { HTTPException } from "hono/http-exception";
 import { User } from "../generated/prisma";
@@ -77,7 +76,15 @@ export class UserService {
     }
 
     static async get(token: string | undefined | null): Promise<User> {
-        token = UserValidation.TOKEN.parse(token) as string
+        const result = UserValidation.TOKEN.safeParse(token)
+        
+        if(result.error) {
+            throw new HTTPException(401, {
+                message: "Unautorized"
+            })
+        }
+
+        token = result.data as string;
 
         const user = await prismaClients.user.findFirst({
             where: {
@@ -92,5 +99,45 @@ export class UserService {
         }
 
         return user;
+    }
+
+
+    static async update(user: User, request: UpdateUserRequest) : Promise<UserResponse> {
+        request = UserValidation.UPDATE.parse(request)
+
+        const updateData: any = {}
+
+        if(request.name) {
+            updateData.name = request.name
+        }
+
+        if(request.password) {
+            updateData.password = await Bun.password.hash(request.password, {
+                algorithm: "bcrypt",
+                cost: 10
+            })
+        }
+
+        const updatedUser = await prismaClients.user.update({
+            where: {
+                username: user.username
+            },
+            data: updateData
+        })
+
+        return toUserResponse(updatedUser)
+    }
+
+    static async logout(user: User) : Promise<boolean> {
+        await prismaClients.user.update({
+            where: {
+                username: user.username
+            },
+            data: {
+                token: null
+            }
+        })
+
+        return true;
     }
 }

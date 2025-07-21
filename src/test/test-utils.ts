@@ -16,10 +16,28 @@ export class UserTest {
     }
 
     static async delete(){
+        // Delete contacts first to avoid foreign key constraint errors
+        await prismaClients.contact.deleteMany({
+            where: {
+                username: "test"
+            }
+        });
         await prismaClients.user.deleteMany({
             where: {
                 username: "test"
             }
         })
     }
+}
+
+export class ContactTest {
+
+    static async deleteAll() {
+        await prismaClients.contact.deleteMany({
+            where: {
+                username: 'test'
+            }
+        })
+    }
+
 }
