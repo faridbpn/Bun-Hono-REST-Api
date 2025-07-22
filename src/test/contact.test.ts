@@ -156,7 +156,22 @@ describe('PUT /api/contacts/{id}', () => {
     })
 
     it('should rejected update contact if request is invalid', async () => {
-        
+        const contact = await ContactTest.get()
+
+        const response = await app.request('/api/contacts/' + contact.id, {
+            method: 'put',
+            headers: {
+                'Authorization' : 'test'
+            },
+            body: JSON.stringify({
+                first_name: ""
+            }) 
+        }) 
+
+        expect(response.status).toBe(400)
+
+        const body = await response.json()
+        expect(body.errors).toBeDefined()
     });
 
     it('should rejected update contact if id is not found', async () => {
@@ -181,6 +196,29 @@ describe('PUT /api/contacts/{id}', () => {
     
 
     it('should success update if request valid', async () => {
+        const contact = await ContactTest.get()
 
+        const response = await app.request('/api/contacts/' + contact.id, {
+            method: 'put',
+            headers: {
+                 'Authorization': 'test',
+                 'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                first_name: "farid",
+                last_name: "bpn",
+                email: "farid@gmail.com",
+                phone: "123132442"
+            })
+         })
+ 
+         expect(response.status).toBe(200)
+ 
+         const body = await response.json()
+         expect(body.data).toBeDefined() 
+         expect(body.data.first_name).toBe("farid")
+         expect(body.data.last_name).toBe("bpn")
+         expect(body.data.email).toBe("farid@gmail.com")
+         expect(body.data.phone).toBe("123132442")
     });
 });
