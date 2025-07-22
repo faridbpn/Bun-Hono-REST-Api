@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { ApplicationVariables } from "../model/app-model";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { User } from "../generated/prisma";
-import { CreateContactRequest } from "../model/contact-model";
+import { CreateContactRequest, UpdateContactRequest } from "../model/contact-model";
 import { ContactService } from "../service/contact-service";
 
 export const contactController = new Hono<{Variables: ApplicationVariables}>();
@@ -26,4 +26,17 @@ contactController.get('/api/contacts/:id', async (c) => {
     return c.json({
         data: response
     })
+})
+
+contactController.put('/api/contacts/:id', async (c) => {
+    const user = c.get('user') as User
+    const contactId = Number(c.req.param("id"))
+    const request = await c.req.json() as UpdateContactRequest
+    request.id = contactId
+    const response = await ContactService.update(user, request)
+
+    return c.json({
+        data: response
+    })
+    
 })

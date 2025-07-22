@@ -143,3 +143,44 @@ describe('GET /api/contacts/{id}', () => {
          expect(body.data.id).toBe(contact.id)
     });
 })
+
+describe('PUT /api/contacts/{id}', () => {
+    beforeEach(async () => {
+        await ContactTest.deleteAll()
+        await UserTest.create()
+        await ContactTest.create()
+    })
+
+    afterEach(async () => {
+        await UserTest.delete()
+    })
+
+    it('should rejected update contact if request is invalid', async () => {
+        
+    });
+
+    it('should rejected update contact if id is not found', async () => {
+        const contact = await ContactTest.get()
+
+        const response = await app.request('/api/contacts/' + (contact.id + 1), {
+            method: 'put',
+            headers: {
+                 'Authorization': 'test',
+                 'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                first_name: "farid"
+            })
+         })
+ 
+         expect(response.status).toBe(404)
+ 
+         const body = await response.json()
+         expect(body.errors).toBeDefined()
+    });
+    
+
+    it('should success update if request valid', async () => {
+
+    });
+});
