@@ -16,6 +16,10 @@ export class UserTest {
         })
     }
 
+    static async createMany() {
+
+    }
+
     static async delete(){
         // Delete contacts first to avoid foreign key constraint errors
         await prismaClients.contact.deleteMany({
@@ -44,13 +48,19 @@ export class ContactTest {
     static async create() {
         await prismaClients.contact.create({
             data: {
-                first_name: "test",
-                last_name: "test",
+                first_name: "farid",
+                last_name: "bpn",
                 email: "test@gmail.com",
                 phone: "12345",
                 username: "test"
             }
         })
+    }
+
+    static async createMany(n: number){
+        for (let i = 0; i < n; i++) {
+            await this.create()
+        }
     }
 
     static async get(): Promise<Contact> {
