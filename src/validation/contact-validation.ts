@@ -17,4 +17,6 @@ export class ContactValidation {
     })
 
     static readonly GET: ZodType = z.number().positive()
+
+    static readonly DELETE: ZodType = z.number().positive()
 }
