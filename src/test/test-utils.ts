@@ -38,6 +38,15 @@ export class UserTest {
 export class ContactTest {
 
     static async deleteAll() {
+        // Delete addresses first to avoid foreign key constraint errors
+        await prismaClients.address.deleteMany({
+            where: {
+                contact: {
+                    username: 'test'
+                }
+            }
+        });
+        
         await prismaClients.contact.deleteMany({
             where: {
                 username: 'test'
