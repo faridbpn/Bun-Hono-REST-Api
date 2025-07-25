@@ -1,29 +1,31 @@
 # 🐰 Bun REST API with Hono
 
-Project ini adalah RESTful API sederhana yang dibangun dengan **Bun** dan framework ringan **Hono**. Cocok untuk belajar membuat API yang cepat, modern, dan bertipe dengan TypeScript.
+This project is a simple and modern RESTful API built using **Bun** and the lightweight **Hono** framework. It's perfect for learning how to build fast, modern, and fully typed APIs with TypeScript.
 
 ## 🚀 Tech Stack
 
-- **Bun** – Runtime super cepat seperti Node.js
-- **Hono** – Web framework ringan untuk Bun/Deno/Edge
-- **Prisma** – ORM untuk akses database
-- **Zod** – Untuk validasi data
-- **PostgreSQL / MySQL / SQLite** – (Bisa disesuaikan)
+- **Bun** – A blazing-fast JavaScript runtime like Node.js
+- **Hono** – Lightweight web framework compatible with Bun/Deno/Edge
+- **Prisma** – Type-safe ORM for database access
+- **Zod** – Schema-based validator for request/response validation
+- **PostgreSQL / MySQL / SQLite** – (Adaptable based on your database of choice)
 
-## 📁 Struktur Proyek
+## 📁 Project Structure
+
+
 
 ```
 src/
-├── application/       # Konfigurasi dan dependency
-├── controller/        # Logika handler setiap endpoint
-├── model/             # Tipe data request dan response
-├── repository/        # Akses database dengan Prisma
-├── route/             # Daftar routing endpoint
-├── validation/        # Validasi pakai Zod
-└── index.ts           # Entry point utama
+├── application/ # Configuration and dependencies
+├── controller/ # Handler logic for each endpoint
+├── model/ # Type definitions for requests and responses
+├── repository/ # Database access layer using Prisma
+├── route/ # Endpoint routing definitions
+├── validation/ # Data validation using Zod
+└── index.ts # Main entry point
 ```
 
-## 🛠️ Cara Menjalankan
+## 🛠️ How To Run
 
 1. Clone repository:
 ```bash
@@ -42,25 +44,28 @@ bunx prisma generate
 bunx prisma migrate dev --name init
 ```
 
-4. Jalankan server:
+4. Start server:
 ```bash
 bun run index.ts
 ```
 
-## 📌 Contoh Endpoint
+## 📌 Example Endpoint
 
-- `GET /api/contacts` – Ambil semua kontak
-- `POST /api/contacts` – Tambah kontak baru
-- `GET /api/contacts/:id` – Ambil detail kontak berdasarkan ID
-- `DELETE /api/contacts/:id` – Hapus kontak berdasarkan ID
+-GET /api/contacts – Fetch all contacts
+
+-POST /api/contacts – Create a new contact
+
+-GET /api/contacts/:id – Retrieve contact details by ID
+
+=DELETE /api/contacts/:id – Delete a contact by ID
 
 ## 🧪 Testing
 
 > Coming soon – testing dengan Bun + Vitest
 
-## 🤝 Kontribusi
+## 🤝 Contribute
 
-Pull request dan saran sangat terbuka. Silakan fork & PR kalau ada ide atau perbaikan!
+Contributions, suggestions, and ideas are very welcome. Feel free to fork the repo and submit a pull request!
 
 ## 🪪 Lisensi
 
