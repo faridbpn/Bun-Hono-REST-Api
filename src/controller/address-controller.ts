@@ -49,3 +49,16 @@ addressController.put("/api/contacts/:contact_id/addresses/:address_id", async (
   data: response
  })
 });
+
+addressController.put("/api/contacts/:contact_id/addresses/:address_id", async (c) => {
+ const user  = c.get('user') as User
+ const contactId = Number(c.req.param("contact_id"))
+ const addressId = Number(c.req.param("address_id"))
+ const request = await c.req.json() as UpdateAddressRequest
+ request.contact_id = contactId
+ request.id = addressId
+ const response = await AddressService.update(user, request)
+ return c.json({
+  data: response
+ })
+});

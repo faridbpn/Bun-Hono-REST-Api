@@ -3,6 +3,7 @@ import {
   AddressResponse,
   CreateAddressRequest,
   GetAddressRequest,
+  ListAddressRequest,
   RemoveAddressRequest,
   UpdateAddressRequest,
   toAddressResponse,
@@ -92,5 +93,18 @@ export class AddressService {
     });
 
     return toAddressResponse(address);
+  }
+
+  static async list(user: User, request: ListAddressRequest): Promise<Array<AddressResponse>> {
+    request = AddressValidation.LIST.parse(request) as ListAddressRequest
+    await  ContactService.contactMustExist(user, request.contact_id)
+
+    const addresses = await prismaClients.address.findMany({
+      where: {
+        contact_id: request.contact_id
+      }
+    })
+
+    return addresses.map(address => toAddressResponse(address))
   }
 }
